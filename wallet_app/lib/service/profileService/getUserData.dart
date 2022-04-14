@@ -13,7 +13,7 @@ class MyClass {
     return userData;
   }
 
-
+kdkdkdkd
  */
 
 class GetUserName {
@@ -23,13 +23,13 @@ class GetUserName {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference users = FirebaseFirestore.instance.collection('userthing');
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('userthing');
 
     return FutureBuilder<DocumentSnapshot>(
       future: users.doc(documentId).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-
         if (snapshot.hasError) {
           return Text("Something went wrong");
         }
@@ -39,7 +39,8 @@ class GetUserName {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
           return data['userName'];
         }
 
