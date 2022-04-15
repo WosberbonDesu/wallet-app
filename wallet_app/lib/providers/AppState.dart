@@ -11,18 +11,12 @@ import '../models/cardModel.dart';
 
 import '../ui/widgets/error/showSnackbar.dart';
 
-
 class AppState with ChangeNotifier {
-
   final AuthService? authService;
 
   AppState({
-
     required this.authService,
-
-  }) {
-
-  }
+  }) {}
 
   double queryWidth =
       MediaQueryData.fromWindow(WidgetsBinding.instance!.window).size.width;
@@ -34,17 +28,18 @@ class AppState with ChangeNotifier {
   dynamic notifications;
 
   addTransaction(num price, int type, DateTime date) async {
-
     notifyListeners();
   }
 
-  Future getTransactions(String uid) async {
+// Hello
 
+  Future getTransactions(String uid) async {
     try {
       List<TransactionModel> transactions = [];
       var transactionDocs = await FirebaseFirestore.instance
           .collection("cardCollection")
-          .where("userUid", isEqualTo: auth.currentUser!.uid).get();
+          .where("userUid", isEqualTo: auth.currentUser!.uid)
+          .get();
       print(transactionDocs.docs.map((e) => print(e)));
       if (transactionDocs.docs.isNotEmpty) {
         for (var item in transactionDocs.docs) {
@@ -54,22 +49,19 @@ class AppState with ChangeNotifier {
       }
       notifyListeners();
       return transactions;
-
     } catch (e) {
       return "Bir hata oluştu. ${e.toString()}";
     }
-
   }
-
-
 
   Future getFexpense(String uid) async {
-
     try {
       List<TransactionModel> transactions = [];
       var transactionDocs = await FirebaseFirestore.instance
-          .collection("cardCollection").where("isExpense",isEqualTo: false).where("userUid",isEqualTo: auth.currentUser?.uid).get();
-
+          .collection("cardCollection")
+          .where("isExpense", isEqualTo: false)
+          .where("userUid", isEqualTo: auth.currentUser?.uid)
+          .get();
 
       print(transactionDocs.docs.map((e) => print(e)));
       print(transactionDocs.docs.map((e) => print(e)));
@@ -82,19 +74,19 @@ class AppState with ChangeNotifier {
       }
       notifyListeners();
       return transactions;
-
     } catch (e) {
       return "Bir hata oluştu. ${e.toString()}";
     }
-
   }
+
   Future getExpense(String uid) async {
-
     try {
       List<TransactionModel> transactions = [];
       var transactionDocs = await FirebaseFirestore.instance
-          .collection("cardCollection").where("isExpense",isEqualTo: true).where("userUid",isEqualTo: auth.currentUser?.uid).get();
-
+          .collection("cardCollection")
+          .where("isExpense", isEqualTo: true)
+          .where("userUid", isEqualTo: auth.currentUser?.uid)
+          .get();
 
       print(transactionDocs.docs.map((e) => print(e)));
       print(transactionDocs.docs.map((e) => print(e)));
@@ -107,26 +99,24 @@ class AppState with ChangeNotifier {
       }
       notifyListeners();
       return transactions;
-
     } catch (e) {
       return "Bir hata oluştu. ${e.toString()}";
     }
-
   }
 
-
-
-
-  CollectionReference users = FirebaseFirestore.instance.collection('userthing');
+  CollectionReference users =
+      FirebaseFirestore.instance.collection('userthing');
   final auth = FirebaseAuth.instance;
   updateUser(String updatedName) {
-    try{ users
-        .doc(auth.currentUser!.uid)
-        .update({'userName': updatedName})
-        .then((value) => print("User Updated"))
-        .catchError((error) => print("Failed to update user: $error"));
-    }catch (e){
-      showSnackBar(NavigationService.navigatorKey.currentContext!, "Hata çıktı", Colors.red);
+    try {
+      users
+          .doc(auth.currentUser!.uid)
+          .update({'userName': updatedName})
+          .then((value) => print("User Updated"))
+          .catchError((error) => print("Failed to update user: $error"));
+    } catch (e) {
+      showSnackBar(NavigationService.navigatorKey.currentContext!, "Hata çıktı",
+          Colors.red);
     }
     notifyListeners();
   }
@@ -148,37 +138,30 @@ class AppState with ChangeNotifier {
   }
    */
 
-
-
   navigatePushAndRemove(BuildContext context, Widget page) {
     Navigator.pushAndRemoveUntil(context, createRoute(page), (route) => false);
   }
 
   signOut() async {
     try {
-     await FirebaseAuth.instance.signOut().then((value) => navigatePushAndRemove(
-         NavigationService.navigatorKey.currentContext!, const Login()));
-
-
+      await FirebaseAuth.instance.signOut().then((value) =>
+          navigatePushAndRemove(
+              NavigationService.navigatorKey.currentContext!, const Login()));
     } catch (e) {
-      showSnackBar(
-          NavigationService.navigatorKey.currentContext!, "Çıkış Yapılamadı.",
-          PersonalColors.red);
+      showSnackBar(NavigationService.navigatorKey.currentContext!,
+          "Çıkış Yapılamadı.", PersonalColors.red);
     }
     notifyListeners();
   }
 
-
-  CardService(bool isExpense,String userUid,String dateTime,String category,String quantity)async{
-
-    CollectionReference cardRef = FirebaseFirestore.instance.collection("cardCollection");
-
-
+  CardService(bool isExpense, String userUid, String dateTime, String category,
+      String quantity) async {
+    CollectionReference cardRef =
+        FirebaseFirestore.instance.collection("cardCollection");
 
     //Iconda gelecek yada firestore dan yüklenip çekilecek boş bıraktım şimdilik
 
-    try{
-
+    try {
       Map<String, dynamic> cardData = {
         "dateTime": dateTime,
         "category": category,
@@ -188,17 +171,12 @@ class AppState with ChangeNotifier {
       };
 
       await cardRef.add(cardData);
-
-    }catch (e){
-      print("due to some problems in firebase unfortunalty send operation didn't work correctly");
+    } catch (e) {
+      print(
+          "due to some problems in firebase unfortunalty send operation didn't work correctly");
     }
   }
-
 }
-
-
-
-
 
 Route createRoute(Widget page) {
   return PageRouteBuilder(
